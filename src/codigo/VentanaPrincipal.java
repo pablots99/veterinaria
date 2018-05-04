@@ -5,19 +5,76 @@
  */
 package codigo;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author xp
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
+ DataBases con = new DataBases();
+    Connection cn = con.getConexion();
+    String login = "";
+    String password = "";
 
+    Connection conexion; //almacena la conexión al servidor de BBDD
+
+    Statement estado; // almacena el estado de la conexion
+    private ResultSet resultadoConsulta;
+
+    boolean c = true;
+    boolean c2 = true;
+
+   String[] lista;
+    
     /**
      * Creates new form VentanaPrincipal
      */
     public VentanaPrincipal() {
         initComponents();
     }
-
+private void detectaElLogin() {
+   
+    
+   
+    if(jTextFieldLogin.getText().length()>0 && jPasswordField.getPassword().length>0){
+        try{
+            Statement s =  cn.createStatement();
+            boolean condicion = false;
+            ResultSet r = s.executeQuery("select dni,contraseña from usuario where dni=\""+jTextFieldLogin.getText()+
+                                        
+                                            "\" and contraseña=\""+jPasswordField.getText()+"\" ");
+            
+            
+            while(r.next()){ 
+                condicion=true; 
+            }
+            if(condicion){
+                jLabel3.setText( "Acceso concedido");
+                Clientes c = new Clientes();
+                c.setVisible(true);
+                dispose();
+            }
+            else{
+                jLabel3.setText( "Acceso Denegado");
+            }
+        }catch(SQLException e){
+        System.out.println(e.getMessage());
+        }
+        }else{
+            jLabel3.setText( "rellena los campos");        
+        }
+        
+    }
+ 
+        
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,21 +84,164 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTextFieldLogin = new javax.swing.JTextField();
+        jPasswordField = new javax.swing.JPasswordField();
+        jButtonLogin = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Login:");
+
+        jLabel2.setText("Password:");
+
+        jTextFieldLogin.setText("          DNI");
+        jTextFieldLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTextFieldLoginMousePressed(evt);
+            }
+        });
+        jTextFieldLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldLoginActionPerformed(evt);
+            }
+        });
+        jTextFieldLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextFieldLoginKeyPressed(evt);
+            }
+        });
+
+        jPasswordField.setText("jPasswordField1");
+        jPasswordField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPasswordFieldMousePressed(evt);
+            }
+        });
+        jPasswordField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordFieldActionPerformed(evt);
+            }
+        });
+        jPasswordField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jPasswordFieldKeyReleased(evt);
+            }
+        });
+
+        jButtonLogin.setText("INICIO");
+        jButtonLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButtonLoginMousePressed(evt);
+            }
+        });
+        jButtonLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLoginActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("jLabel3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(61, 61, 61)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTextFieldLogin)
+                        .addGap(128, 128, 128))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPasswordField, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                        .addGap(107, 107, 107))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(84, 84, 84))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(62, 62, 62)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(57, 57, 57)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextFieldLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(45, 45, 45)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42)
+                .addComponent(jButtonLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextFieldLoginMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldLoginMousePressed
+        if (c) {
+            jTextFieldLogin.setText("");
+
+            c = false;
+
+        }
+    }//GEN-LAST:event_jTextFieldLoginMousePressed
+
+    private void jTextFieldLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldLoginActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldLoginActionPerformed
+
+    private void jTextFieldLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldLoginKeyPressed
+
+        if (c) {
+            jTextFieldLogin.setText("");
+
+            c = false;
+
+        }
+    }//GEN-LAST:event_jTextFieldLoginKeyPressed
+
+    private void jPasswordFieldMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPasswordFieldMousePressed
+        if (c2) {
+            jPasswordField.setText("");
+
+            c2 = false;}
+    }//GEN-LAST:event_jPasswordFieldMousePressed
+
+    private void jPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordFieldActionPerformed
+
+    private void jPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordFieldKeyReleased
+        if (c2) {
+            jPasswordField.setText("");
+
+            c2 = false;}
+    }//GEN-LAST:event_jPasswordFieldKeyReleased
+
+    private void jButtonLoginMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLoginMousePressed
+        detectaElLogin();
+        
+
+    }//GEN-LAST:event_jButtonLoginMousePressed
+
+    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
+      
+    }//GEN-LAST:event_jButtonLoginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +279,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonLogin;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    public javax.swing.JPasswordField jPasswordField;
+    public javax.swing.JTextField jTextFieldLogin;
     // End of variables declaration//GEN-END:variables
 }
